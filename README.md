@@ -2,7 +2,7 @@
 
 A thrilling space shooter game built with Next.js, React, and TypeScript. Defend the galaxy from waves of enemy invaders in this action-packed arcade-style game!
 
-![Game Screenshot](./public/placeholder.jpg)
+![Game Screenshot](./public/placeholder.png)
 
 ## Features
 
