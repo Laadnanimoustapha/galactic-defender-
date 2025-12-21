@@ -1,8 +1,14 @@
 # Galactic Defender
 
+FREE [Plastine](https://www.plastine.com/)!
+
 A thrilling space shooter game built with Next.js, React, and TypeScript. Defend the galaxy from waves of enemy invaders in this action-packed arcade-style game!
 
 ![Game Screenshot](./public/placeholder.png)
+
+## Play the Game
+
+Want to jump right in? **[Play Galactic Defender online here!](https://galactic-defender-two.vercel.app/)**
 
 ## Features
 
@@ -129,3 +135,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Enjoy defending the galaxy! 🚀**
+
+---
+
+Made by laadnani — hosted for free on (https://galactic-defender-two.vercel.app/) 
