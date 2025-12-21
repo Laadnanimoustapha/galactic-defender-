@@ -33,7 +33,9 @@ export const MainMenu: React.FC<MainMenuProps> = ({ onStart }) => {
             <div className="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-6 text-sm text-center">
                 <ControlKey k="WASD" label="MOVE" />
                 <ControlKey k="SPACE" label="SHOOT" />
-                <ControlKey k="R" label="ROCKET" />
+                <ControlKey k="R" label="ROCKET (Cost 20)" />
+                <ControlKey k="E" label="SHIELD (Cost 25)" />
+                <ControlKey k="T" label="Missile (Cost 30)" />
                 <ControlKey k="ESC" label="PAUSE" />
             </div>
 

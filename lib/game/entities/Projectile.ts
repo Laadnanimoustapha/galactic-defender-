@@ -30,20 +30,16 @@ export class Projectile extends Entity {
         const speedPerMs = (this.speed * 60) / 1000;
 
         if (this.type === 'smart_rocket' && this.target && this.target.active) {
-            // Homing logic (Steering)
+            // Homing logic 
             const desiredAngle = Math.atan2(this.target.y - this.y, this.target.x - this.x);
 
-            // Just set velocity for now, simple homing
+            // Smooth steering really needs "current angle", but instant turn for now is fun
             this.vx = Math.cos(desiredAngle);
             this.vy = Math.sin(desiredAngle);
 
             this.x += this.vx * speedPerMs * dt;
             this.y += this.vy * speedPerMs * dt;
-
-            // Correct rotation visual later
         } else {
-            // Linear Movement
-            // If vx/vy are set, use them. If 0, assume standard up (-y)
             if (this.vx === 0 && this.vy === 0) {
                 this.y -= speedPerMs * dt;
             } else {
@@ -58,22 +54,42 @@ export class Projectile extends Entity {
 
         if (this.type === 'bullet') {
             const angle = Math.atan2(this.vy, this.vx);
-            if (this.vx !== 0) { // Rotate check
+            if (this.vx !== 0) {
                 ctx.save();
                 ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
-                ctx.rotate(angle + Math.PI / 2); // Adjust so UP is 0
+                ctx.rotate(angle + Math.PI / 2);
                 ctx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
                 ctx.restore();
             } else {
                 ctx.fillRect(this.x, this.y, this.width, this.height);
             }
         } else if (this.type === 'rocket' || this.type === 'smart_rocket') {
-            ctx.beginPath();
-            ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width, 0, Math.PI * 2);
-            ctx.fill();
+            // Detailed Missile Draw
+            const cx = this.x + this.width / 2;
+            const cy = this.y + this.height / 2;
 
-            ctx.fillStyle = "rgba(255, 100, 0, 0.5)";
-            ctx.fillRect(this.x + 2, this.y + this.height, this.width - 4, 10);
+            ctx.strokeStyle = this.type === 'smart_rocket' ? '#00ff00' : '#ffaa00';
+            ctx.lineWidth = 1;
+            ctx.fillStyle = '#ffffff';
+
+            // Body
+            ctx.beginPath();
+            ctx.moveTo(cx, this.y);
+            ctx.lineTo(this.x + this.width, this.y + this.height - 5);
+            ctx.lineTo(cx, this.y + this.height);
+            ctx.lineTo(this.x, this.y + this.height - 5);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Thruster
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = this.color;
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(cx, this.y + this.height, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
         }
     }
 }
