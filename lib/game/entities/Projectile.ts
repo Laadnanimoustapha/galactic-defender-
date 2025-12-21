@@ -2,9 +2,10 @@ import { Entity } from './Entity';
 
 export class Projectile extends Entity {
     speed: number;
+    vx: number = 0;
+    vy: number = 0;
     damage: number;
     color: string;
-    // For specialized movement like Rockets
     type: 'bullet' | 'rocket' | 'smart_rocket' | 'laser';
     target?: Entity;
 
@@ -29,19 +30,26 @@ export class Projectile extends Entity {
         const speedPerMs = (this.speed * 60) / 1000;
 
         if (this.type === 'smart_rocket' && this.target && this.target.active) {
-            // Homing logic
-            const angle = Math.atan2(this.target.y - this.y, this.target.x - this.x);
-            // Simple homing: just set velocity towards target.
-            // In a real physics engine we would add force/steering behavior,
-            // but for arcade feel, direct velocity setting is fine, maybe with some turn rate limit if needed.
-            // Ensuring "turn rate" makes it feel more like a missile.
-            // For now, let's just move DIRECTLY at it to match original behavior roughly
+            // Homing logic (Steering)
+            const desiredAngle = Math.atan2(this.target.y - this.y, this.target.x - this.x);
 
-            this.x += Math.cos(angle) * speedPerMs * dt;
-            this.y += Math.sin(angle) * speedPerMs * dt;
+            // Just set velocity for now, simple homing
+            this.vx = Math.cos(desiredAngle);
+            this.vy = Math.sin(desiredAngle);
+
+            this.x += this.vx * speedPerMs * dt;
+            this.y += this.vy * speedPerMs * dt;
+
+            // Correct rotation visual later
         } else {
-            // Standard linear movement (UP usually for player bullets)
-            this.y -= speedPerMs * dt;
+            // Linear Movement
+            // If vx/vy are set, use them. If 0, assume standard up (-y)
+            if (this.vx === 0 && this.vy === 0) {
+                this.y -= speedPerMs * dt;
+            } else {
+                this.x += this.vx * speedPerMs * dt;
+                this.y += this.vy * speedPerMs * dt;
+            }
         }
     }
 
@@ -49,14 +57,21 @@ export class Projectile extends Entity {
         ctx.fillStyle = this.color;
 
         if (this.type === 'bullet') {
-            ctx.fillRect(this.x, this.y, this.width, this.height);
+            const angle = Math.atan2(this.vy, this.vx);
+            if (this.vx !== 0) { // Rotate check
+                ctx.save();
+                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+                ctx.rotate(angle + Math.PI / 2); // Adjust so UP is 0
+                ctx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
+                ctx.restore();
+            } else {
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+            }
         } else if (this.type === 'rocket' || this.type === 'smart_rocket') {
-            // Rocket shape
             ctx.beginPath();
             ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width, 0, Math.PI * 2);
             ctx.fill();
 
-            // Trail effect (simple)
             ctx.fillStyle = "rgba(255, 100, 0, 0.5)";
             ctx.fillRect(this.x + 2, this.y + this.height, this.width - 4, 10);
         }

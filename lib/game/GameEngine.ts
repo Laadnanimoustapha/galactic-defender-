@@ -35,10 +35,10 @@ export class GameEngine {
 
     // Powerup Flags
     private isShieldActive: boolean = false;
-    private isMagicActive: boolean = false;
     private lastShotTime: number = 0;
     private lastRocketTime: number = 0;
     private lastShieldTime: number = 0;
+    private lastSpecialTime: number = 0;
 
     constructor(canvas: HTMLCanvasElement, input: InputManager) {
         this.canvas = canvas;
@@ -47,7 +47,12 @@ export class GameEngine {
 
         this.projectilePool = new ObjectPool<Projectile>(
             () => new Projectile(0, 0, 0, 0, 0, 0),
-            (p) => { p.active = true; }
+            (p) => {
+                p.active = true;
+                p.vx = 0;
+                p.vy = 0;
+                p.target = undefined;
+            }
         );
 
         this.particlePool = new ObjectPool<Particle>(
@@ -108,16 +113,47 @@ export class GameEngine {
         if (!this.player) return;
 
         this.player.update(dt, this.input, this.canvas.width, this.canvas.height);
-
-        // Regenerate Energy
         this.state.energy = Math.min(100, this.state.energy + 0.05 * (dt / 16));
 
-        // Shooting (Basic)
+        // Shooting (Spread / Basic)
+        // Default is 1 bullet. If Magic Mode, 3.
         if (this.input.isPressed('SHOOT')) {
             const now = Date.now();
             if (now - this.lastShotTime > GameConfig.PLAYER.INITIAL_RATES.SHOOT) {
-                this.spawnBullet(this.player.x + this.player.width / 2 - 2, this.player.y);
+                // Center Bullet
+                this.spawnBullet(this.player.x + this.player.width / 2 - 2, this.player.y, 0, -1);
+
+                // Spread Shot (Unlockable or Default?)
+                // Let's make it standard "Power" upgrade later? 
+                // For now, let's just enable it to show off the "More Weapons" request.
+                if (this.state.score > 500) { // Unlock after 500 points
+                    this.spawnBullet(this.player.x, this.player.y + 10, -0.2, -0.9);
+                    this.spawnBullet(this.player.x + this.player.width, this.player.y + 10, 0.2, -0.9);
+                }
                 this.lastShotTime = now;
+            }
+        }
+
+        // HOMING MISSILE (T / Skill 2)
+        if (this.input.isPressed('SKILL_2')) {
+            const now = Date.now();
+            if (now - this.lastSpecialTime > 2000 && this.state.energy >= 30) {
+                this.state.energy -= 30;
+                this.lastSpecialTime = now;
+
+                // Find Target
+                const target = this.enemies.find(e => e.active);
+
+                const p = this.projectilePool.get();
+                p.x = this.player.x + this.player.width / 2;
+                p.y = this.player.y;
+                p.width = 8;
+                p.height = 8;
+                p.speed = 5;
+                p.damage = 20;
+                p.color = '#00ff00';
+                p.type = 'smart_rocket';
+                p.target = target;
             }
         }
 
@@ -139,7 +175,7 @@ export class GameEngine {
             }
         }
 
-        // SHIELD (Q / E inferred as Skill 3)
+        // SHIELD (Skill 3)
         if (this.input.isPressed('SKILL_3')) {
             const now = Date.now();
             if (now - this.lastShieldTime > GameConfig.PLAYER.INITIAL_RATES.SHIELD && this.state.energy >= 25) {
@@ -154,21 +190,39 @@ export class GameEngine {
         this.projectilePool.getActive().forEach(p => p.update(dt));
         const activeProjectiles = [...this.projectilePool.getActive()];
         activeProjectiles.forEach(p => {
-            if (p.y < -50 || p.y > this.canvas.height + 50 || !p.active) {
+            if (p.x < 0 || p.x > this.canvas.width || p.y < -50 || p.y > this.canvas.height + 50 || !p.active) {
                 p.active = false;
                 this.projectilePool.release(p);
             }
         });
 
         // Spawn Enemies
-        // Increasing difficulty
-        if (Math.random() < 0.01 + (this.state.score / 50000)) {
-            const type = Math.random() > 0.9 ? 'tank' : Math.random() > 0.7 ? 'fast' : 'basic';
+        const spawnRate = 0.01 + (this.state.score / 20000);
+        if (Math.random() < spawnRate) {
+            let type = 'basic';
+            const rand = Math.random();
+            if (rand > 0.95) type = 'tank';
+            else if (rand > 0.8) type = 'fast';
+            else if (rand > 0.99) type = 'boss'; // Very rare random boss
+
             this.enemies.push(new Enemy(Math.random() * (this.canvas.width - 30), type as any));
         }
 
         // Update Enemies
-        this.enemies.forEach(e => e.update(dt));
+        this.enemies.forEach(e => {
+            e.update(dt);
+            // Basic behavior update here
+            // Sine Wave movement for 'basic' enemies
+            if (e.type === 'basic') {
+                e.x += Math.sin(e.y * 0.02) * 2;
+            }
+            // Seeker behavior for 'fast'
+            if (e.type === 'fast' && this.player) {
+                if (e.x < this.player.x) e.x += 1;
+                else e.x -= 1;
+            }
+        });
+
         this.enemies = this.enemies.filter(e => e.y < this.canvas.height && e.active);
 
         // Update Particles
@@ -181,10 +235,12 @@ export class GameEngine {
         this.checkCollisions();
     }
 
-    private spawnBullet(x: number, y: number) {
+    private spawnBullet(x: number, y: number, vx: number = 0, vy: number = -1) {
         const p = this.projectilePool.get();
         p.x = x;
         p.y = y;
+        p.vx = vx;
+        p.vy = vy;
         p.width = 4;
         p.height = 10;
         p.speed = 8;
@@ -194,7 +250,6 @@ export class GameEngine {
     }
 
     private checkCollisions() {
-        // Bullets vs Enemies
         const activeProjectiles = this.projectilePool.getActive();
         for (const bullet of activeProjectiles) {
             if (!bullet.active) continue;
@@ -203,20 +258,18 @@ export class GameEngine {
                 if (bullet.intersects(enemy)) {
                     enemy.health -= bullet.damage;
                     bullet.active = false;
-
                     this.spawnExplosion(bullet.x, bullet.y, "#ffaa00", 3);
 
                     if (enemy.health <= 0) {
                         enemy.active = false;
                         this.state.score += enemy.points;
-                        this.state.combo += 1; // Basic combo
+                        this.state.combo += 1;
                         this.spawnExplosion(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, "#ff0000", 15);
                     }
                 }
             }
         }
 
-        // Enemy vs Player
         if (this.player && !this.isShieldActive) {
             for (const enemy of this.enemies) {
                 if (enemy.intersects(this.player)) {
@@ -246,11 +299,8 @@ export class GameEngine {
 
     private draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // Neon Glow Effect
         this.ctx.shadowBlur = 10;
 
-        // Draw Shield
         if (this.player && this.isShieldActive) {
             this.ctx.shadowColor = "#00ffff";
             this.ctx.strokeStyle = "#00ffff";
@@ -259,7 +309,7 @@ export class GameEngine {
             this.ctx.arc(
                 this.player.x + this.player.width / 2,
                 this.player.y + this.player.height / 2,
-                this.player.width, 0, Math.PI * 2
+                this.player.width + 10, 0, Math.PI * 2
             );
             this.ctx.stroke();
         }
