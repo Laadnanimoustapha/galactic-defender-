@@ -134,8 +134,25 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Enjoy defending the galaxy! 🚀**
+## 📊 Project Statistics
+
+![Lines of Code](https://img.shields.io/badge/Lines_of_Code-6705-blueviolet?style=for-the-badge&logo=visual-studio-code)
 
 ---
 
-Made by laadnani — hosted for free on (https://galactic-defender-two.vercel.app/) 
+### 🇵🇸 Support
+
+[![Free Palestine](https://img.shields.io/badge/Free-Palestine-CE1126?labelColor=000000&color=007A3D)](#support-palestine)
+
+---
+
+```text
+__  __    _    ____  _____   ____  __   __
+|  \/  |  / \  |  _ \| ____| | __ ) \ \ / /
+| |\/| | / _ \ | | | |  _|   |  _ \  \ V / 
+| |  | |/ ___ \| |_| | |___  | |_) |  | |  
+|_|  |_/_/   \_\____/|_____| |____/   |_|  
+          MADE BY LAADNANI
+```
+**Author:** Laadnani Mustapha  
+**GitHub:** [github.com/Laadnanimoustapha](https://github.com/Laadnanimoustapha)
