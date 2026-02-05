@@ -6,6 +6,8 @@ import { InputManager } from "@/lib/game/InputManager"
 import { GameState } from "@/lib/game/types"
 import { GameHUD } from "@/components/ui/GameHUD"
 import { MainMenu } from "@/components/ui/MainMenu"
+import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 
 export default function GalacticDefender() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -83,15 +85,26 @@ export default function GalacticDefender() {
 
         {/* Simple Game Over Check */}
         {isPlaying && engineState?.isGameOver && (
-          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/80 backdrop-blur-md text-white">
-            <h2 className="text-6xl font-black text-red-500 mb-4">CRITICAL FAILURE</h2>
-            <p className="text-2xl mb-8">SCORE: {engineState.score}</p>
-            <button
-              onClick={handleStartGame}
-              className="px-8 py-3 bg-white text-black font-bold text-xl rounded-full hover:scale-105 transition-transform"
-            >
-              REBOOT SYSTEM
-            </button>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+            <Card className="max-w-md w-full bg-black/80 border-red-500/50 shadow-[0_0_50px_-12px_rgba(239,68,68,0.5)]">
+              <CardHeader className="text-center">
+                <CardTitle className="text-6xl font-black text-red-500 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)]">
+                  CRITICAL FAILURE
+                </CardTitle>
+                <CardDescription className="text-2xl text-white/80 font-mono mt-4">
+                  FINAL SCORE: {engineState.score.toLocaleString()}
+                </CardDescription>
+              </CardHeader>
+              <CardFooter className="flex justify-center pt-6">
+                <Button
+                  onClick={handleStartGame}
+                  size="lg"
+                  className="px-8 h-12 bg-white text-black font-bold text-xl rounded-full hover:scale-105 transition-transform hover:bg-white/90"
+                >
+                  REBOOT SYSTEM
+                </Button>
+              </CardFooter>
+            </Card>
           </div>
         )}
       </div>
