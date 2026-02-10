@@ -1,4 +1,4 @@
-import { InputKey } from '../types';
+import { InputKey } from './types';
 
 export class InputManager {
     private keys: Set<string> = new Set();

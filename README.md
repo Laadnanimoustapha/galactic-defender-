@@ -1,158 +1,137 @@
-# Galactic Defender
+# 🚀 Galactic Defender
 
-FREE [Plastine](https://www.plastine.com/)!
+<div align="center">
 
-A thrilling space shooter game built with Next.js, React, and TypeScript. Defend the galaxy from waves of enemy invaders in this action-packed arcade-style game!
+![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?style=for-the-badge&logo=tailwind-css)
+![Canvas](https://img.shields.io/badge/HTML5-Canvas-E34F26?style=for-the-badge&logo=html5)
+![Web Audio](https://img.shields.io/badge/Web_Audio-API-FF6F00?style=for-the-badge)
 
-![Game Screenshot](./public/placeholder.png)
+[![Free Palestine](https://img.shields.io/badge/Free-Palestine-CE1126?labelColor=000000&color=007A3D&style=for-the-badge)](#support-palestine)
 
-## Play the Game
+**An action-packed space shooter built with Next.js, HTML5 Canvas, and Web Audio API.**
 
-Want to jump right in? **[Play Galactic Defender online here!](https://galactic-defender-two.vercel.app/)**
+Defend the galaxy against waves of increasingly dangerous enemies using rockets, homing missiles, and energy shields!
 
-## Features
-
-- **Multiple Enemy Types**: Face basic, fast, tank, and boss enemies
-- **Power-ups and Abilities**:
-  - Shield protection
-  - Triple shot
-  - Rockets and smart rockets
-  - Laser beams
-  - Nuclear strikes
-  - Health regeneration
-  - Speed boosts
-  - Magic attacks
-- **Progressive Difficulty**: Increasing waves with more enemies and challenges
-- **Scoring System**: Combo multipliers and high scores
-- **Responsive Design**: Play on desktop with keyboard controls
-- **Particle Effects**: Explosions, sparkles, and visual feedback
-- **Boss Battles**: Epic encounters with powerful enemies
-
-## Installation
-
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd galactic-defender-
-```
-
-2. Install dependencies:
-```bash
-npm install
-# or
-pnpm install
-# or
-yarn install
-```
-
-3. Run the development server:
-```bash
-npm run dev
-# or
-pnpm dev
-# or
-yarn dev
-```
-
-4. Open [http://localhost:3000](http://localhost:3000) in your browser to play the game.
-
-## Controls
-
-- **Arrow Keys** or **WASD**: Move your spaceship
-- **Spacebar**: Shoot bullets
-- **R**: Fire rocket
-- **T**: Smart rocket (homing)
-- **Q**: Activate shield
-- **E**: Laser attack
-- **X**: Nuclear strike
-- **H**: Health regeneration
-- **B**: Speed boost
-- **M**: Magic attack (increased damage)
-- **P**: Pause game
-- **Enter**: Start game (from menu)
-
-## Gameplay
-
-- **Objective**: Survive waves of enemies and achieve the highest score possible
-- **Health**: You have 3 lives - lose them all and it's game over
-- **Energy**: Powers special abilities - regenerates over time
-- **Combos**: Chain enemy kills for score multipliers
-- **Waves**: Each wave brings more enemies and tougher challenges
-
-## Technologies Used
-
-- **Next.js 14** - React framework
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Styling
-- **shadcn/ui** - UI components
-- **Canvas API** - Game rendering
-- **React Hooks** - State management
-
-## Project Structure
-
-```
-galactic-defender-/
-├── app/                    # Next.js app directory
-│   ├── layout.tsx         # Root layout
-│   ├── page.tsx           # Main game component
-│   ├── game.module.css    # Game-specific styles
-│   └── globals.css        # Global styles
-├── components/             # Reusable components
-│   ├── ui/                # shadcn/ui components
-│   └── theme-provider.tsx # Theme provider
-├── hooks/                  # Custom React hooks
-├── lib/                    # Utility functions
-├── public/                 # Static assets
-├── styles/                 # Additional styles
-└── package.json            # Dependencies and scripts
-```
-
-## Building for Production
-
-```bash
-npm run build
-npm start
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Built with [Next.js](https://nextjs.org/)
-- UI components from [shadcn/ui](https://ui.shadcn.com/)
-- Icons from [Lucide React](https://lucide.dev/)
+</div>
 
 ---
 
-## 📊 Project Statistics
+## 🎮 Features
 
-![Lines of Code](https://img.shields.io/badge/Lines_of_Code-6705-blueviolet?style=for-the-badge&logo=visual-studio-code)
+### Core Gameplay
+- 🛸 **4 Enemy Types** — Basic drones, fast chasers, armored tanks, and devastating bosses
+- 🔫 **3 Weapon Systems** — Rapid-fire bullets, explosive rockets, and homing missiles
+- 🛡️ **Energy Shield** — Temporary invulnerability barrier
+- 🌊 **Wave Progression** — Survive increasingly difficult waves with countdown transitions
+- ⚡ **Combo System** — Chain kills for higher scores with decay timer
+- 💎 **Power-Up Drops** — Collect health, energy, and score bonuses from defeated enemies
+- 🏆 **High Score Persistence** — Your best score saved in localStorage
 
----
+### Enemies Fight Back!
+- 👹 **Enemy Shooting** — Basic drones and tanks fire projectiles at you
+- 🎯 **Boss Spread Attacks** — Bosses fire lethal patterns
+- ❤️ **Enemy Health Bars** — Visible HP on tanks and bosses
 
-### 🇵🇸 Support
+### Visual & Audio
+- 🌌 **Parallax Starfield** — Multi-layer scrolling stars with twinkling and nebula glow
+- 💥 **Screen Shake** — Camera shakes on damage and boss kills
+- 🎵 **Synthesized SFX** — 9 unique procedurally-generated sounds (Web Audio API)
+- ✨ **Particle Explosions** — Scaled by enemy type (boss = massive boom)
+- 🔮 **Glowing Shield Effect** — Pulsating protective aura
 
-[![Free Palestine](https://img.shields.io/badge/Free-Palestine-CE1126?labelColor=000000&color=007A3D)](#support-palestine)
+### UI & HUD
+- 📊 **Advanced HUD** — Score, health, energy, wave progress, kill counter, survival timer
+- ⏱️ **Cooldown Indicators** — Circular progress for each weapon skill
+- 🔴 **Boss Health Bar** — Full-width HP bar during boss fights
+- ⏸️ **Pause Menu** — Resume, Restart, Quit with blur overlay
+- 🏁 **Rich Game Over** — Stats grid with wave, kills, max combo, time survived
+- ⭐ **New High Score Celebration** — Special golden UI when you beat your record
+- 📢 **Wave Announcements** — Animated "WAVE X INCOMING" banner between waves
 
----
+## 🎯 Controls
 
-```text
-__  __    _    ____  _____   ____  __   __
-|  \/  |  / \  |  _ \| ____| | __ ) \ \ / /
-| |\/| | / _ \ | | | |  _|   |  _ \  \ V / 
-| |  | |/ ___ \| |_| | |___  | |_) |  | |  
-|_|  |_/_/   \_\____/|_____| |____/   |_|  
-          MADE BY LAADNANI
+| Key | Action |
+|-----|--------|
+| `WASD` / Arrow Keys | Move ship |
+| `Space` | Fire bullets (auto-spread at 500+ score) |
+| `R` | Launch rocket (20 energy) |
+| `T` | Fire homing missile (30 energy) |
+| `E` | Activate shield (25 energy, 5s duration) |
+| `ESC` / `P` | Pause game |
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| **Next.js 14** | React framework & SSR |
+| **TypeScript** | Type-safe game logic |
+| **HTML5 Canvas** | 60fps game rendering |
+| **Web Audio API** | Procedural sound synthesis |
+| **Tailwind CSS 4** | UI styling |
+| **Shadcn/UI** | Menu & HUD components |
+| **Object Pooling** | Zero-GC entity management |
+
+## 📐 Architecture
+
 ```
-**Author:** Laadnani Mustapha  
-**GitHub:** [github.com/Laadnanimoustapha](https://github.com/Laadnanimoustapha)
+lib/game/
+├── GameEngine.ts      # Core game loop, physics, collisions
+├── InputManager.ts    # Keyboard input handling
+├── SoundManager.ts    # Web Audio API synthesized SFX
+├── config.ts          # Game balance constants
+├── types.ts           # TypeScript interfaces
+├── entities/
+│   ├── Entity.ts      # Base entity class
+│   ├── Player.ts      # Ship rendering & movement
+│   ├── Enemy.ts       # 4 enemy types with shooting AI
+│   ├── Projectile.ts  # Bullets, rockets, homing missiles
+│   ├── Particle.ts    # Explosion particle system
+│   ├── PowerUp.ts     # Collectible drops
+│   └── Starfield.ts   # Parallax background
+└── utils/
+    └── ObjectPool.ts  # Memory-efficient entity recycling
+```
+
+---
+
+<div align="center">
+
+### 📏 Lines of Code
+
+```
+╔══════════════════════════════════════════╗
+║                                          ║
+║       ⚡  7,534  LINES OF CODE  ⚡       ║
+║                                          ║
+╚══════════════════════════════════════════╝
+```
+
+---
+
+<br/>
+
+```
+ ██████╗  █████╗ ██╗      █████╗  ██████╗████████╗██╗ ██████╗
+██╔════╝ ██╔══██╗██║     ██╔══██╗██╔════╝╚══██╔══╝██║██╔════╝
+██║  ███╗███████║██║     ███████║██║        ██║   ██║██║     
+██║   ██║██╔══██║██║     ██╔══██║██║        ██║   ██║██║     
+╚██████╔╝██║  ██║███████╗██║  ██║╚██████╗   ██║   ██║╚██████╗
+ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝
+██████╗ ███████╗███████╗███████╗███╗   ██╗██████╗ ███████╗██████╗ 
+██╔══██╗██╔════╝██╔════╝██╔════╝████╗  ██║██╔══██╗██╔════╝██╔══██╗
+██║  ██║█████╗  █████╗  █████╗  ██╔██╗ ██║██║  ██║█████╗  ██████╔╝
+██║  ██║██╔══╝  ██╔══╝  ██╔══╝  ██║╚██╗██║██║  ██║██╔══╝  ██╔══██╗
+██████╔╝███████╗██║     ███████╗██║ ╚████║██████╔╝███████╗██║  ██║
+╚═════╝ ╚══════╝╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝
+```
+
+---
+
+![Made By Laadnani](https://img.shields.io/badge/🚀_MADE_BY-LAADNANI-0ff?style=for-the-badge&labelColor=0a0a1a&color=00e5ff)
+![Author](https://img.shields.io/badge/AUTHOR-Laadnani_Mustapha-blueviolet?style=for-the-badge&logo=github)
+
+**[🌐 Visit GitHub Profile](https://github.com/Laadnanimoustapha)**
+
+</div>
