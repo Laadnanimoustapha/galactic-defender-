@@ -17,6 +17,8 @@ export interface Entity extends Vector2D, Size {
 
 export type EnemyType = 'basic' | 'fast' | 'tank' | 'boss';
 
+export type PowerUpType = 'health' | 'energy' | 'score_bonus';
+
 export interface GameState {
     score: number;
     health: number;
@@ -27,6 +29,20 @@ export interface GameState {
     maxCombo: number;
     isGameOver: boolean;
     isPaused: boolean;
+    highScore: number;
+    totalKills: number;
+    waveKills: number;
+    waveKillsRequired: number;
+    waveCountdown: number;
+    isWaveTransition: boolean;
+    timeSurvived: number;
+    bossHealth: number;
+    bossMaxHealth: number;
+    bossActive: boolean;
+    lastShotTime: number;
+    lastRocketTime: number;
+    lastShieldTime: number;
+    lastSpecialTime: number;
 }
 
 export type InputKey = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT' | 'SHOOT' | 'SKILL_1' | 'SKILL_2' | 'SKILL_3' | 'PAUSE';
