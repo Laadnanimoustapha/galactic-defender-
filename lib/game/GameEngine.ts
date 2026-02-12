@@ -9,6 +9,7 @@ import { PowerUp } from './entities/PowerUp';
 import { Starfield } from './entities/Starfield';
 import { ObjectPool } from './utils/ObjectPool';
 import { soundManager } from './SoundManager';
+import { initEnemySVGs } from './assets/enemies';
 
 export class GameEngine {
     private canvas: HTMLCanvasElement;
@@ -72,6 +73,8 @@ export class GameEngine {
 
         window.addEventListener('resize', this.resize);
         this.resize();
+
+        initEnemySVGs();
     }
 
     private createInitialState(): GameState {
@@ -369,7 +372,7 @@ export class GameEngine {
             }
         });
 
-        this.enemies = this.enemies.filter(e => e.y < this.canvas.height + 50 && e.active);
+        this.enemies = this.enemies.filter(e => (e.y < this.canvas.height + 50) && (e.active || e.isDying));
 
         const hasBoss = this.enemies.some(e => e.type === 'boss' && e.active);
         if (!hasBoss && this.state.bossActive) {
@@ -458,7 +461,7 @@ export class GameEngine {
                     this.spawnExplosion(bullet.x, bullet.y, "#ffaa00", 3);
 
                     if (enemy.health <= 0) {
-                        enemy.active = false;
+                        enemy.startDeathAnimation();
                         this.state.score += enemy.points;
                         this.state.combo += 1;
                         this.comboTimer = 0;
@@ -486,7 +489,7 @@ export class GameEngine {
         if (this.player && !this.isShieldActive) {
             for (const enemy of this.enemies) {
                 if (!enemy.active) continue;
-                if (enemy.intersects(this.player)) {
+                if (enemy.intersects(this.player) && !enemy.isDying) {
                     this.damagePlayer();
                     enemy.active = false;
                     this.spawnExplosion(enemy.x, enemy.y, "#ffffff", 20);
