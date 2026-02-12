@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
-import { Rocket, Shield, Crosshair, Target, Trophy } from 'lucide-react'
+import { RocketIcon, ShieldIcon, CrosshairIcon, TrophyIcon } from '@/components/ui/icons'
 
 interface MainMenuProps {
     onStart: () => void;
@@ -22,7 +22,7 @@ export const MainMenu: React.FC<MainMenuProps> = ({ onStart, highScore = 0 }) =>
                     </CardDescription>
                     {highScore > 0 && (
                         <div className="flex items-center justify-center gap-2 text-yellow-400/80">
-                            <Trophy className="w-4 h-4" />
+                            <TrophyIcon className="w-4 h-4" />
                             <span className="text-sm font-mono font-bold tracking-wider">
                                 HIGH SCORE: {highScore.toLocaleString()}
                             </span>
@@ -52,9 +52,9 @@ export const MainMenu: React.FC<MainMenuProps> = ({ onStart, highScore = 0 }) =>
                     <div className="w-full grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
                         <ControlBadge k="WASD" label="MOVE" />
                         <ControlBadge k="SPACE" label="SHOOT" />
-                        <ControlBadge k="R" label="ROCKET (20)" icon={<Rocket className="w-3 h-3" />} />
-                        <ControlBadge k="T" label="HOMING (30)" icon={<Target className="w-3 h-3" />} />
-                        <ControlBadge k="E" label="SHIELD (25)" icon={<Shield className="w-3 h-3" />} />
+                        <ControlBadge k="R" label="ROCKET (20)" icon={<RocketIcon className="w-3 h-3" />} />
+                        <ControlBadge k="T" label="HOMING (30)" icon={<CrosshairIcon className="w-3 h-3" />} />
+                        <ControlBadge k="E" label="SHIELD (25)" icon={<ShieldIcon className="w-3 h-3" />} />
                     </div>
                     <p className="text-[10px] text-center text-white/20 font-mono tracking-wider">
                         ESC TO PAUSE • ENEMIES SHOOT BACK • COLLECT POWER-UPS

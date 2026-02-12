@@ -9,7 +9,7 @@ import { MainMenu } from "@/components/ui/MainMenu"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Trophy, Skull, Timer, Zap, Swords } from "lucide-react"
+import { TrophyIcon, SkullIcon, TimerIcon, FlashIcon, SwordsIcon } from "@/components/ui/icons"
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
@@ -179,15 +179,15 @@ export default function GalacticDefender() {
 
               <CardContent className="pt-2">
                 <div className="grid grid-cols-2 gap-3">
-                  <StatCard icon={<Swords className="w-4 h-4 text-orange-400" />} label="WAVE" value={engineState.wave.toString()} />
-                  <StatCard icon={<Skull className="w-4 h-4 text-red-400" />} label="KILLS" value={engineState.totalKills.toString()} />
-                  <StatCard icon={<Zap className="w-4 h-4 text-yellow-400" />} label="MAX COMBO" value={`${engineState.maxCombo}x`} />
-                  <StatCard icon={<Timer className="w-4 h-4 text-cyan-400" />} label="TIME" value={formatTime(engineState.timeSurvived)} />
+                  <StatCard icon={<SwordsIcon className="w-4 h-4 text-orange-400" />} label="WAVE" value={engineState.wave.toString()} />
+                  <StatCard icon={<SkullIcon className="w-4 h-4 text-red-400" />} label="KILLS" value={engineState.totalKills.toString()} />
+                  <StatCard icon={<FlashIcon className="w-4 h-4 text-yellow-400" />} label="MAX COMBO" value={`${engineState.maxCombo}x`} />
+                  <StatCard icon={<TimerIcon className="w-4 h-4 text-cyan-400" />} label="TIME" value={formatTime(engineState.timeSurvived)} />
                 </div>
 
                 {engineState.highScore > 0 && !isNewHighScore && (
                   <div className="flex items-center justify-center gap-2 mt-4 text-white/30">
-                    <Trophy className="w-3.5 h-3.5" />
+                    <TrophyIcon className="w-3.5 h-3.5" />
                     <span className="text-xs font-mono">BEST: {engineState.highScore.toLocaleString()}</span>
                   </div>
                 )}

@@ -3,7 +3,7 @@ import { GameState } from '@/lib/game/types';
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Zap, Heart, Crosshair, Skull, Timer, Rocket, Shield, Target } from 'lucide-react';
+import { HeartIcon, SkullIcon, RocketIcon, ShieldIcon, CrosshairIcon, TimerIcon, FlashIcon } from '@/components/ui/icons';
 import { GameConfig } from '@/lib/game/config';
 
 interface GameHUDProps {
@@ -45,12 +45,12 @@ export const GameHUD: React.FC<GameHUDProps> = ({ state }) => {
 
                 <div className={`flex gap-2 mt-1 ${state.health === 1 ? 'animate-pulse' : ''}`}>
                     {Array.from({ length: 3 }).map((_, i) => (
-                        <Heart
+                        <HeartIcon
                             key={i}
                             className={`w-7 h-7 transition-all duration-300 ${i < state.health
                                 ? state.health === 1
-                                    ? 'fill-red-500 text-red-500 drop-shadow-[0_0_12px_rgba(239,68,68,1)] scale-110'
-                                    : 'fill-red-500 text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]'
+                                    ? 'text-red-500 drop-shadow-[0_0_12px_rgba(239,68,68,1)] scale-110'
+                                    : 'text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]'
                                 : 'text-white/20'
                                 }`}
                         />
@@ -58,9 +58,9 @@ export const GameHUD: React.FC<GameHUDProps> = ({ state }) => {
                 </div>
 
                 <div className="flex items-center gap-2 mt-1 text-white/50">
-                    <Skull className="w-3.5 h-3.5" />
+                    <SkullIcon className="w-3.5 h-3.5" />
                     <span className="text-xs font-mono">{state.totalKills}</span>
-                    <Timer className="w-3.5 h-3.5 ml-2" />
+                    <TimerIcon className="w-3.5 h-3.5 ml-2" />
                     <span className="text-xs font-mono">{formatTime(state.timeSurvived)}</span>
                 </div>
             </div>
@@ -79,7 +79,7 @@ export const GameHUD: React.FC<GameHUDProps> = ({ state }) => {
             {/* Top Right: Energy + Cooldowns */}
             <div className="absolute top-4 right-4 md:top-6 md:right-6 flex flex-col items-end gap-2">
                 <div className="flex items-center gap-2 mb-0.5">
-                    <Zap className="w-4 h-4 text-cyan-400 fill-cyan-400" />
+                    <FlashIcon className="w-4 h-4 text-cyan-400" />
                     <span className="text-xs text-cyan-400 font-mono font-bold tracking-widest">ENERGY</span>
                 </div>
                 <div className="w-48 md:w-64">
@@ -88,9 +88,9 @@ export const GameHUD: React.FC<GameHUDProps> = ({ state }) => {
 
                 {/* Skill Cooldowns */}
                 <div className="flex gap-3 mt-2">
-                    <CooldownIndicator label="R" icon={<Rocket className="w-3 h-3" />} pct={rocketCd} color="text-orange-400" />
-                    <CooldownIndicator label="T" icon={<Target className="w-3 h-3" />} pct={homingCd} color="text-green-400" />
-                    <CooldownIndicator label="E" icon={<Shield className="w-3 h-3" />} pct={shieldCd} color="text-cyan-400" />
+                    <CooldownIndicator label="R" icon={<RocketIcon className="w-3 h-3" />} pct={rocketCd} color="text-orange-400" />
+                    <CooldownIndicator label="T" icon={<CrosshairIcon className="w-3 h-3" />} pct={homingCd} color="text-green-400" />
+                    <CooldownIndicator label="E" icon={<ShieldIcon className="w-3 h-3" />} pct={shieldCd} color="text-cyan-400" />
                 </div>
             </div>
 
@@ -122,7 +122,7 @@ const CooldownIndicator = ({ label, icon, pct, color }: { label: string; icon: R
     return (
         <div className={`flex flex-col items-center gap-1 transition-all duration-300 ${ready ? 'opacity-100 scale-110' : 'opacity-50 scale-100'}`}>
             <div className={`relative w-9 h-9 rounded-full border-2 flex items-center justify-center text-xs font-bold font-mono transition-all duration-300 ${ready
-                ? `${color} border-current shadow-[0_0_12px_currentColor] animate-[skill-ready_0.6s_ease-out]`
+                ? `${color} border-current shadow-[0_0_12px_currentColor]`
                 : 'text-white/30 border-white/20'
                 }`}>
                 <span>{label}</span>
