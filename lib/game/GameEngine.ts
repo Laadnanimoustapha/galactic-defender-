@@ -10,6 +10,7 @@ import { Starfield } from './entities/Starfield';
 import { ObjectPool } from './utils/ObjectPool';
 import { soundManager } from './SoundManager';
 import { initEnemySVGs } from './assets/enemies';
+import { SpatialHash } from './utils/SpatialHash';
 
 export class GameEngine {
     private canvas: HTMLCanvasElement;
@@ -29,6 +30,7 @@ export class GameEngine {
 
     private shakeIntensity: number = 0;
     private shakeDuration: number = 0;
+    private spatialHash: SpatialHash<{ x: number; y: number; width: number; height: number; _ref?: any }> = new SpatialHash(100);
 
     state: GameState = this.createInitialState();
 
@@ -390,8 +392,22 @@ export class GameEngine {
 
     private updatePowerUps(dt: number) {
         if (!this.player) return;
+        const px = this.player.x + this.player.width / 2;
+        const py = this.player.y + this.player.height / 2;
+
         this.powerUpPool.getActive().forEach(p => {
             p.update(dt);
+
+            // Magnetism: drift toward player within 80px
+            const dx = px - (p.x + p.width / 2);
+            const dy = py - (p.y + p.height / 2);
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 80 && dist > 0) {
+                const pull = (1 - dist / 80) * 3;
+                p.x += (dx / dist) * pull;
+                p.y += (dy / dist) * pull;
+            }
+
             if (p.intersects(this.player!)) {
                 p.active = false;
                 this.collectPowerUp(p);
@@ -643,7 +659,6 @@ export class GameEngine {
         });
 
         this.enemies.forEach(e => {
-            ctx.shadowColor = "#ff0000";
             e.draw(ctx);
         });
 
@@ -651,10 +666,32 @@ export class GameEngine {
             p.draw(ctx);
         });
 
+        // Batch particles by color to minimize fillStyle swaps
+        const particlesByColor = new Map<string, Particle[]>();
         this.particlePool.getActive().forEach(p => {
-            ctx.shadowColor = p.color;
-            p.draw(ctx);
+            if (!particlesByColor.has(p.color)) particlesByColor.set(p.color, []);
+            particlesByColor.get(p.color)!.push(p);
         });
+        particlesByColor.forEach((particles, color) => {
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 6;
+            for (const p of particles) {
+                p.draw(ctx);
+            }
+        });
+
+        // Low-health red vignette pulse
+        if (this.state.health === 1 && !this.state.isGameOver) {
+            const pulse = (Math.sin(Date.now() * 0.004) + 1) * 0.15 + 0.1;
+            const grad = ctx.createRadialGradient(
+                this.canvas.width / 2, this.canvas.height / 2, this.canvas.width * 0.25,
+                this.canvas.width / 2, this.canvas.height / 2, this.canvas.width * 0.75
+            );
+            grad.addColorStop(0, 'transparent');
+            grad.addColorStop(1, `rgba(255, 0, 0, ${pulse})`);
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        }
 
         ctx.shadowBlur = 0;
         ctx.restore();

@@ -43,12 +43,14 @@ export const GameHUD: React.FC<GameHUDProps> = ({ state }) => {
                     </div>
                 )}
 
-                <div className="flex gap-2 mt-1">
+                <div className={`flex gap-2 mt-1 ${state.health === 1 ? 'animate-pulse' : ''}`}>
                     {Array.from({ length: 3 }).map((_, i) => (
                         <Heart
                             key={i}
                             className={`w-7 h-7 transition-all duration-300 ${i < state.health
-                                ? 'fill-red-500 text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]'
+                                ? state.health === 1
+                                    ? 'fill-red-500 text-red-500 drop-shadow-[0_0_12px_rgba(239,68,68,1)] scale-110'
+                                    : 'fill-red-500 text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]'
                                 : 'text-white/20'
                                 }`}
                         />
@@ -118,9 +120,9 @@ export const GameHUD: React.FC<GameHUDProps> = ({ state }) => {
 const CooldownIndicator = ({ label, icon, pct, color }: { label: string; icon: React.ReactNode; pct: number; color: string }) => {
     const ready = pct >= 100;
     return (
-        <div className={`flex flex-col items-center gap-1 transition-opacity ${ready ? 'opacity-100' : 'opacity-50'}`}>
-            <div className={`relative w-9 h-9 rounded-full border-2 flex items-center justify-center text-xs font-bold font-mono ${ready
-                ? `${color} border-current shadow-[0_0_8px_currentColor]`
+        <div className={`flex flex-col items-center gap-1 transition-all duration-300 ${ready ? 'opacity-100 scale-110' : 'opacity-50 scale-100'}`}>
+            <div className={`relative w-9 h-9 rounded-full border-2 flex items-center justify-center text-xs font-bold font-mono transition-all duration-300 ${ready
+                ? `${color} border-current shadow-[0_0_12px_currentColor] animate-[skill-ready_0.6s_ease-out]`
                 : 'text-white/30 border-white/20'
                 }`}>
                 <span>{label}</span>

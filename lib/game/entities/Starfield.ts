@@ -19,10 +19,28 @@ export class Starfield {
     private height: number;
     private time: number = 0;
 
+    private offscreenCanvas: OffscreenCanvas | HTMLCanvasElement | null = null;
+    private offscreenCtx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | null = null;
+    private needsRedraw: boolean = true;
+    private frameCounter: number = 0;
+
     constructor(width: number, height: number) {
         this.width = width;
         this.height = height;
         this.initLayers();
+        this.createOffscreen();
+    }
+
+    private createOffscreen() {
+        try {
+            if (typeof OffscreenCanvas !== 'undefined') {
+                this.offscreenCanvas = new OffscreenCanvas(this.width, this.height);
+                this.offscreenCtx = this.offscreenCanvas.getContext('2d');
+            }
+        } catch {
+            this.offscreenCanvas = null;
+            this.offscreenCtx = null;
+        }
     }
 
     private initLayers() {
@@ -53,10 +71,13 @@ export class Starfield {
         this.width = width;
         this.height = height;
         this.initLayers();
+        this.createOffscreen();
+        this.needsRedraw = true;
     }
 
     update(dt: number) {
         this.time += dt;
+        this.frameCounter++;
         for (const layer of this.layers) {
             for (const star of layer.stars) {
                 star.y += star.speed * (dt / 16);
@@ -68,9 +89,14 @@ export class Starfield {
                 }
             }
         }
+        // Only redraw offscreen every 3 frames for the nebula (static)
+        if (this.frameCounter % 3 === 0) {
+            this.needsRedraw = true;
+        }
     }
 
     draw(ctx: CanvasRenderingContext2D) {
+        // Draw stars directly (they move every frame)
         for (const layer of this.layers) {
             for (const star of layer.stars) {
                 const twinkle = (Math.sin(star.twinklePhase) + 1) * 0.25 + 0.5;
@@ -82,14 +108,33 @@ export class Starfield {
             }
         }
 
-        const nebulaGrad = ctx.createRadialGradient(
-            this.width * 0.7, this.height * 0.3, 0,
-            this.width * 0.7, this.height * 0.3, this.width * 0.4
-        );
-        nebulaGrad.addColorStop(0, 'rgba(80, 20, 120, 0.04)');
-        nebulaGrad.addColorStop(0.5, 'rgba(20, 60, 140, 0.02)');
-        nebulaGrad.addColorStop(1, 'transparent');
-        ctx.fillStyle = nebulaGrad;
-        ctx.fillRect(0, 0, this.width, this.height);
+        // Draw nebula from offscreen buffer if available
+        if (this.offscreenCtx && this.offscreenCanvas) {
+            if (this.needsRedraw) {
+                this.offscreenCtx.clearRect(0, 0, this.width, this.height);
+                const nebulaGrad = this.offscreenCtx.createRadialGradient(
+                    this.width * 0.7, this.height * 0.3, 0,
+                    this.width * 0.7, this.height * 0.3, this.width * 0.4
+                );
+                nebulaGrad.addColorStop(0, 'rgba(80, 20, 120, 0.04)');
+                nebulaGrad.addColorStop(0.5, 'rgba(20, 60, 140, 0.02)');
+                nebulaGrad.addColorStop(1, 'transparent');
+                this.offscreenCtx.fillStyle = nebulaGrad;
+                this.offscreenCtx.fillRect(0, 0, this.width, this.height);
+                this.needsRedraw = false;
+            }
+            ctx.drawImage(this.offscreenCanvas as any, 0, 0);
+        } else {
+            // Fallback: direct draw
+            const nebulaGrad = ctx.createRadialGradient(
+                this.width * 0.7, this.height * 0.3, 0,
+                this.width * 0.7, this.height * 0.3, this.width * 0.4
+            );
+            nebulaGrad.addColorStop(0, 'rgba(80, 20, 120, 0.04)');
+            nebulaGrad.addColorStop(0.5, 'rgba(20, 60, 140, 0.02)');
+            nebulaGrad.addColorStop(1, 'transparent');
+            ctx.fillStyle = nebulaGrad;
+            ctx.fillRect(0, 0, this.width, this.height);
+        }
     }
 }
